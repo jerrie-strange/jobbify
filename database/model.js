@@ -7,9 +7,10 @@ const UserSchema = new Schema(
       type: String,
       unique: true,
     },
-    username: {
+    companyName: {
       required: true,
       type: String,
+      unique: true,
     },
     password: {
       required: true,

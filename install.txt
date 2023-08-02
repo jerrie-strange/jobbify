@@ -1,1 +1,4 @@
-npm i jsonwebtoken
+npm i cookie-parser
+git remote add origin https://github.com/jerrie-strange/jobbify.git
+git branch -M main
+git push -u origin main
