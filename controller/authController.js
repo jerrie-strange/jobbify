@@ -63,11 +63,14 @@ module.exports = {
     if (job) {
       //@error you will need to get the current user companyName then pass it to  { user.companyName}
       if (job.companyName == user.companyName) {
-        Job.findOneAndUpdate({
-          companyName,
-          describtion,
-          title,
-        });
+        Job.findOneAndUpdate(
+          { companyName: job.companyName },
+          {
+            companyName,
+            describtion,
+            title,
+          }
+        );
       } else {
         throw new Error("you cant change a job that you did not post");
       }
