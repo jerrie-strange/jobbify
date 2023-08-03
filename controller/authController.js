@@ -39,15 +39,16 @@ module.exports = {
   Login: async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
+    console.log(req.cookies.jwt);
     if (user && (await user.matchPassword(password))) {
+      generateToken(res, user.id);
       res.status(200).json({
         _id: user._id,
         email: user.email,
         companyName: user.companyName,
         isAdmin: user.isAdmin,
         profile: user.profile,
-        token: generateToken(user.id),
+        // token: generateToken(user.id),
       });
     } else {
       res
@@ -57,7 +58,7 @@ module.exports = {
   },
   // @ this function has not be tested!!!!!
   jobUpdateHandler: async (req, res) => {
-    const jobId = req.params(id);
+    const jobId = req.params["id"];
     const { companyName, describtion, title } = req.body;
     const job = Job.findOne({ _id: jobId });
     if (job) {
@@ -78,26 +79,28 @@ module.exports = {
       throw new Error("job not found");
     }
   },
-  // @ this function has not be tested!!!!!
+  // @ this function has be tested!!!!!
   jobCreateHandler: async (req, res) => {
     const { companyName, describtion, title } = req.body;
     try {
-      const job = await Job.Create({
+      const job = await new Job({
         companyName,
         describtion,
         title,
       });
+      job.save();
       res.status(201).json({
-        companyName,
-        describtion,
-        title,
+        id: job._id,
+        companyName: job.companyName,
+        describtion: job.describtion,
+        title: job.title,
       });
     } catch (error) {
       res.status(500).json({ message: "could not create the Job" });
-      throw new Error("could not create the Job");
+      // throw new Error("could not create the Job");
     }
   },
-  // @ this function has not be tested!!!!!
+  // @ this function has  be tested!!!!!
   //@desc get all jobs
   jobHandler: async (req, res) => {
     try {
